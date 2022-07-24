@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Control</title>
+    <style>
+        body{
+            padding: 0;
+            margin: 0;
+        }
+        #mainFrame {
+            width: 100%;
+            height: 99vh;
+            border: 0;
+            margin: 0;
+            padding: 0;
+        }
+
+        #urlInput {
+            width: 30%;
+            margin: 10px 0;
+        }
+
+        #urlList {
+            width: 30%;
+        }
+        #pannel{
+            position: absolute;
+            width: 100%;
+        }
+
+    </style>
+
+</head>
+
+<body>
+    <div id="pannel">
+        <input type="text" id="urlInput" value="/">
+        <button type="button" onclick="setFrame()">GO</button>
+        <button type="button" onclick="setLinksList()">setLinksList</button>
+        <select id="urlList"></select>
+        <button type="button" onclick="setFrame2()">GO</button>
+    </div>
+
+    <iframe id="mainFrame" src="/" frameborder="0"></iframe>
+    <script>
+        let myFrame = document.getElementById('mainFrame')
+        let inputUrl = document.getElementById('urlInput')
+        let listUrl = document.getElementById('urlList')
+        let linksList = myFrame.contentWindow.document.getElementsByTagName('a')
+        function setFrame () {
+            myFrame.src = inputUrl.value
+        }
+        function setFrame2 () {
+            myFrame.src = listUrl.value
+            myFrame.addEventListener('load', (e, d) => {
+                
+                let myFrameHeight = myFrame.contentWindow.document.body.scrollHeight
+
+                let intrvalID = setInterval(() => {
+                    let newOffset = myFrame.contentWindow.pageYOffset + (myFrame.contentWindow.outerHeight / 3 )
+                    myFrame.contentWindow.scrollTo(0, newOffset)
+                    if((myFrameHeight) < newOffset + myFrame.contentWindow.outerHeight) {
+                        clearInterval(intrvalID)
+                        console.log('Inerval cleared')
+                        console.log(listUrl.selectedIndex)
+                        listUrl.selectedIndex++
+                        console.log(listUrl.selectedIndex)
+                    }
+                }, 200)
+            })
+
+        }
+        function setLinksList () {
+            linksList = [...new Set(myFrame.contentWindow.document.getElementsByTagName('a'))] 
+
+            for (const iterator of linksList)
+            {
+                let option = document.createElement('option')
+                option.text = iterator.href
+                listUrl.add(option)
+            }
+        }
+    </script>
+</body>
+
+</html>
