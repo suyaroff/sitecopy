@@ -1,5 +1,6 @@
 <?php
-$host = 'https://pelicula.qodeinteractive.com';
+//http://rainbowit.net/themes/imroz/
+$host = 'http://rainbowit.net';
 
 $request = urldecode($_SERVER['REQUEST_URI']);
 $url = $host . $request;
